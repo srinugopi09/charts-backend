@@ -1,0 +1,37 @@
+# Visualization Selection Test Cases
+# Verifies the agent chooses the right visualization type
+
+- name: category_comparison
+  input: "Compare revenue across regions"
+  expected:
+    viz_type: ["bar", "horizontalBar"]
+
+- name: time_series
+  input: "Show monthly revenue trend"
+  expected:
+    viz_type: ["line", "area"]
+
+- name: part_of_whole
+  input: "What percentage of budget does each department use?"
+  expected:
+    viz_type: ["pie", "doughnut", "bar"]
+
+- name: single_metric
+  input: "What is the total revenue?"
+  expected:
+    viz_type: ["kpi"]
+
+- name: record_listing
+  input: "Show me all the incidents"
+  expected:
+    viz_type: ["dataTable"]
+
+- name: multiple_kpis
+  input: "Show total revenue, average budget, and project count"
+  expected:
+    viz_type: ["dashboard", "kpi"]
+
+- name: mixed_dashboard
+  input: "Give me a project overview with key metrics and a status chart"
+  expected:
+    viz_type: ["dashboard"]

@@ -1,0 +1,51 @@
+# Multi-Turn Context Test Cases
+# Verifies the agent handles conversation context across turns
+
+- name: drill_down
+  turns:
+    - role: user
+      content: "Show revenue by region"
+    - role: user
+      content: "Drill into the West region"
+  expected:
+    turn_2_sql_contains: ["West"]
+    context_preserved: true
+
+- name: change_viz_type
+  turns:
+    - role: user
+      content: "Show revenue by region as a bar chart"
+    - role: user
+      content: "Show that as a table instead"
+  expected:
+    turn_2_viz: ["dataTable"]
+    context_preserved: true
+
+- name: add_filter
+  turns:
+    - role: user
+      content: "Show all projects"
+    - role: user
+      content: "Only show at-risk ones"
+  expected:
+    turn_2_sql_contains: ["at_risk"]
+    context_preserved: true
+
+- name: reference_that
+  turns:
+    - role: user
+      content: "What is total revenue?"
+    - role: user
+      content: "Break that down by quarter"
+  expected:
+    turn_2_sql_contains: ["quarter", "GROUP BY"]
+    context_preserved: true
+
+- name: shared_state_context
+  turns:
+    - role: user
+      content: "Show revenue by region"
+    - role: user
+      content: "Now add a trend line for the top region"
+  expected:
+    context_preserved: true

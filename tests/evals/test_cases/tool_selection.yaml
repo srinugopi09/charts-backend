@@ -1,0 +1,41 @@
+# Tool Selection Test Cases
+# Verifies the agent picks the right tools for different question types
+
+- name: simple_data_question
+  input: "How many projects are there?"
+  expected:
+    required_tools: ["query_database", "generate_kpi_card"]
+    forbidden_tools: ["generate_chart", "generate_data_table"]
+
+- name: schema_exploration
+  input: "What tables are available?"
+  expected:
+    required_tools: ["list_tables"]
+    forbidden_tools: ["query_database", "generate_chart"]
+
+- name: column_discovery
+  input: "What columns does the projects table have?"
+  expected:
+    required_tools: ["describe_table"]
+    forbidden_tools: ["query_database"]
+
+- name: chart_question
+  input: "Show revenue by region as a chart"
+  expected:
+    required_tools: ["query_database", "generate_chart"]
+
+- name: table_request
+  input: "List all projects with their budget and status"
+  expected:
+    required_tools: ["query_database", "generate_data_table"]
+
+- name: dashboard_request
+  input: "Give me an overview of project health with key metrics and a chart"
+  expected:
+    required_tools: ["query_database"]
+    # Should use generate_dashboard or multiple generate_* tools
+
+- name: status_check
+  input: "What is the health status of each team?"
+  expected:
+    required_tools: ["query_database"]

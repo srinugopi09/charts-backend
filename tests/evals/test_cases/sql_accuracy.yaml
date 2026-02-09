@@ -1,0 +1,39 @@
+# SQL Accuracy Test Cases
+# Verifies the agent generates correct SQL for various question types
+
+- name: simple_count
+  input: "How many projects are there?"
+  expected:
+    tools_called: ["query_database"]
+    sql_contains: ["COUNT"]
+    result_check: "row_count == 1"
+
+- name: group_by
+  input: "Show revenue by region"
+  expected:
+    tools_called: ["query_database"]
+    sql_contains: ["GROUP BY", "region"]
+
+- name: time_filter
+  input: "Show monthly metrics for 2025"
+  expected:
+    tools_called: ["query_database"]
+    sql_contains: ["2025"]
+
+- name: join_query
+  input: "Show project names with their team assignments"
+  expected:
+    tools_called: ["query_database"]
+    sql_contains: ["JOIN"]
+
+- name: top_n
+  input: "What are the top 5 projects by budget?"
+  expected:
+    tools_called: ["query_database"]
+    sql_contains: ["ORDER BY", "LIMIT"]
+
+- name: conditional
+  input: "Show only at-risk projects"
+  expected:
+    tools_called: ["query_database"]
+    sql_contains: ["at_risk"]

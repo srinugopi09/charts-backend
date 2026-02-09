@@ -1,0 +1,35 @@
+# ADK Evaluation Configuration
+# Run with: uv run python tests/evals/run_evals.py --all
+
+evaluation:
+  # Use same model as production
+  model: ${GEMINI_MODEL:-gemini-2.0-flash}
+
+  # Run each test case N times to account for LLM non-determinism
+  runs_per_case: 3
+
+  # Require M out of N runs to pass
+  pass_threshold: 2
+
+  # Timeout per agent run (seconds)
+  timeout_seconds: 60
+
+  # Database must have seed data loaded
+  database_url: ${DATABASE_URL:-postgresql://analytics:localdev@localhost:5432/analytics_db}
+
+suites:
+  sql_accuracy:
+    description: "Does the agent write correct SQL?"
+    test_file: test_cases/sql_accuracy.yaml
+
+  tool_selection:
+    description: "Does the agent pick the right tools?"
+    test_file: test_cases/tool_selection.yaml
+
+  viz_selection:
+    description: "Does the agent choose the right visualization?"
+    test_file: test_cases/viz_selection.yaml
+
+  multi_turn:
+    description: "Does the agent handle conversation context correctly?"
+    test_file: test_cases/multi_turn.yaml
