@@ -63,6 +63,8 @@ def generate_chart(
     y_label: str = "",
     interactive: bool = False,
     color_scheme: str = "default",
+    value_prefix: str = "",
+    value_suffix: str = "",
     tool_context=None,
 ) -> dict:
     """Generates an A2UI Graph component for the frontend to render.
@@ -80,6 +82,8 @@ def generate_chart(
         y_label: Y-axis label.
         interactive: Enable drill-down interactions (default False).
         color_scheme: Named palette — "default", "sequential", "diverging", "status", "categorical".
+        value_prefix: Symbol prepended to numeric values on axes/tooltips (e.g., "$" for currency). Leave empty for plain numbers.
+        value_suffix: Symbol appended to numeric values on axes/tooltips (e.g., "%" for percentages). Leave empty for plain numbers.
         tool_context: ADK ToolContext (auto-injected). Used to update shared state.
 
     Returns:
@@ -95,6 +99,8 @@ def generate_chart(
         y_label=y_label,
         interactive=interactive,
         color_scheme=color_scheme,
+        value_prefix=value_prefix,
+        value_suffix=value_suffix,
     )
     if "error" not in payload:
         _update_viz_state(tool_context, chart_type, title, payload["surfaceId"], labels)

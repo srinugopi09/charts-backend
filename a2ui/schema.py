@@ -76,6 +76,8 @@ class GraphProperties(BaseModel):
     interactive: bool = True
     showLegend: bool = True
     colorScheme: str = "default"
+    valuePrefix: str = ""
+    valueSuffix: str = ""
 
 
 class KPICardProperties(BaseModel):

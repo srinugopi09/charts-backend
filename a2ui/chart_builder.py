@@ -37,6 +37,8 @@ def build_chart_surface(
     y_label: str = "",
     interactive: bool = False,
     color_scheme: str = "default",
+    value_prefix: str = "",
+    value_suffix: str = "",
 ) -> dict:
     """Build an A2UI Graph component surface payload."""
     if chart_type not in VALID_CHART_TYPES:
@@ -72,6 +74,8 @@ def build_chart_surface(
         "interactive": interactive,
         "showLegend": True,
         "colorScheme": color_scheme,
+        "valuePrefix": value_prefix,
+        "valueSuffix": value_suffix,
     }
     return _wrap(surface_id, [root])
 

@@ -65,7 +65,10 @@ Choose the visualization type based on the data pattern:
 - For **CompositeDashboard**, put KPI cards first (top row) and charts below
 - Chart titles should be **descriptive but concise** (e.g., "Revenue by Region — Q4 2025")
 - Always include **axis labels** on bar and line charts
-- For datasets, use descriptive labels (e.g., "Revenue ($)" not just "data")
+- For datasets, use descriptive labels (e.g., "Revenue" not just "data")
+- Set **value_prefix="$"** for currency/monetary data (revenue, budget, spend, cost)
+- Set **value_suffix="%"** for percentage data (growth rates, margins, completion rates)
+- Leave value_prefix and value_suffix **empty** for plain counts (headcount, projects, incidents)
 
 ## Response Style
 

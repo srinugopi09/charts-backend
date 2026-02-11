@@ -81,6 +81,8 @@ def build_dashboard_surface(
             "interactive": chart.get("interactive", False),
             "showLegend": True,
             "colorScheme": chart.get("color_scheme", "default"),
+            "valuePrefix": chart.get("value_prefix", ""),
+            "valueSuffix": chart.get("value_suffix", ""),
         })
 
     # Tables

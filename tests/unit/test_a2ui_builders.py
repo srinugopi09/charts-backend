@@ -106,6 +106,28 @@ class TestGraphBuilder:
         seq_palette = get_palette("sequential", 4)
         assert ds["backgroundColor"] == seq_palette
 
+    def test_graph_value_prefix(self):
+        result = build_chart_surface(
+            "bar", "Revenue", SAMPLE_LABELS, SAMPLE_DATASETS, value_prefix="$"
+        )
+        root = _get_root(result)
+        assert root["valuePrefix"] == "$"
+        assert root["valueSuffix"] == ""
+
+    def test_graph_value_suffix(self):
+        result = build_chart_surface(
+            "line", "Growth Rate", SAMPLE_LABELS, SAMPLE_DATASETS, value_suffix="%"
+        )
+        root = _get_root(result)
+        assert root["valuePrefix"] == ""
+        assert root["valueSuffix"] == "%"
+
+    def test_graph_value_prefix_defaults_empty(self):
+        result = build_chart_surface("bar", "Count", SAMPLE_LABELS, SAMPLE_DATASETS)
+        root = _get_root(result)
+        assert root["valuePrefix"] == ""
+        assert root["valueSuffix"] == ""
+
 
 # ---------------------------------------------------------------------------
 # KPI Card tests
@@ -232,6 +254,36 @@ class TestDashboardBuilder:
         assert _get_component(result, "kpi-0")["component"] == "KPICard"
         assert _get_component(result, "kpi-1")["component"] == "KPICard"
         assert _get_component(result, "chart-0")["component"] == "Graph"
+
+    def test_dashboard_chart_value_prefix_suffix(self):
+        result = build_dashboard_surface(
+            "Financial Overview",
+            charts=[{
+                "chart_type": "bar",
+                "title": "Revenue",
+                "labels": ["Q1", "Q2"],
+                "datasets": [{"label": "Rev", "data": [100, 200]}],
+                "value_prefix": "$",
+                "value_suffix": "",
+            }],
+        )
+        chart = _get_component(result, "chart-0")
+        assert chart["valuePrefix"] == "$"
+        assert chart["valueSuffix"] == ""
+
+    def test_dashboard_chart_value_prefix_defaults_empty(self):
+        result = build_dashboard_surface(
+            "Counts",
+            charts=[{
+                "chart_type": "bar",
+                "title": "Projects",
+                "labels": ["A"],
+                "datasets": [{"label": "X", "data": [1]}],
+            }],
+        )
+        chart = _get_component(result, "chart-0")
+        assert chart["valuePrefix"] == ""
+        assert chart["valueSuffix"] == ""
 
     def test_node_ids_unique(self):
         result = build_dashboard_surface(
