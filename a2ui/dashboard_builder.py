@@ -4,13 +4,9 @@ A dashboard contains child KPICard, Graph, and DataTable components
 referenced by their IDs via the spec's 'children.explicitList' format.
 """
 
-import re
+import uuid
 
 from a2ui.catalog import CATALOG_ID, get_palette
-
-
-def _sanitize_id(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
 
 def build_dashboard_surface(
@@ -18,6 +14,7 @@ def build_dashboard_surface(
     kpis: list[dict] | None = None,
     charts: list[dict] | None = None,
     tables: list[dict] | None = None,
+    insights: list[dict] | None = None,
     layout: str = "auto",
 ) -> dict:
     """Build an A2UI CompositeDashboard surface payload.
@@ -29,6 +26,7 @@ def build_dashboard_surface(
     kpis = kpis or []
     charts = charts or []
     tables = tables or []
+    insights = insights or []
 
     components = []
     child_ids = []
@@ -100,8 +98,21 @@ def build_dashboard_surface(
             "pageSize": table.get("page_size", 25),
         })
 
+    # Insight cards
+    for i, insight in enumerate(insights):
+        comp_id = f"insight-{i}"
+        child_ids.append(comp_id)
+        components.append({
+            "id": comp_id,
+            "component": "InsightCard",
+            "title": insight.get("title", ""),
+            "body": insight.get("body", ""),
+            "icon": insight.get("icon", "info"),
+            "priority": insight.get("priority", "medium"),
+        })
+
     # Dashboard root component (must be first, with id "root")
-    surface_id = f"dashboard-{_sanitize_id(title)}"
+    surface_id = f"dashboard-{uuid.uuid4().hex[:8]}"
     root = {
         "id": "root",
         "component": "CompositeDashboard",

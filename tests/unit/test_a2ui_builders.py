@@ -285,12 +285,41 @@ class TestDashboardBuilder:
         assert chart["valuePrefix"] == ""
         assert chart["valueSuffix"] == ""
 
+    def test_dashboard_with_insights(self):
+        result = build_dashboard_surface(
+            "Analysis",
+            charts=[{"chart_type": "bar", "title": "Resolution Times", "labels": ["Quality", "Ops"], "datasets": [{"label": "Hours", "data": [19, 38]}]}],
+            insights=[{"title": "Key Finding", "body": "Quality dept resolves fastest", "icon": "success", "priority": "high"}],
+        )
+        _assert_valid_envelope(result)
+        root = _get_root(result)
+        child_ids = root["children"]["explicitList"]
+        assert len(child_ids) == 2  # 1 chart + 1 insight
+        # Chart comes before insight
+        assert _get_component(result, "chart-0")["component"] == "Graph"
+        insight = _get_component(result, "insight-0")
+        assert insight["component"] == "InsightCard"
+        assert insight["title"] == "Key Finding"
+        assert insight["body"] == "Quality dept resolves fastest"
+        assert insight["icon"] == "success"
+        assert insight["priority"] == "high"
+
+    def test_dashboard_insight_defaults(self):
+        result = build_dashboard_surface(
+            "Defaults",
+            insights=[{"title": "Note", "body": "Some finding"}],
+        )
+        insight = _get_component(result, "insight-0")
+        assert insight["icon"] == "info"
+        assert insight["priority"] == "medium"
+
     def test_node_ids_unique(self):
         result = build_dashboard_surface(
             "Test",
             kpis=[{"label": "A", "value": 1}, {"label": "B", "value": 2}],
             charts=[{"chart_type": "bar", "title": "C", "labels": ["x"], "datasets": [{"label": "Y", "data": [1]}]}],
             tables=[{"title": "T", "columns": [{"key": "k", "label": "K"}], "rows": [[1]]}],
+            insights=[{"title": "I", "body": "Finding"}],
         )
         ids = [c["id"] for c in _get_all_components(result)]
         assert len(ids) == len(set(ids)), f"Duplicate IDs found: {ids}"

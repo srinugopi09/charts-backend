@@ -195,6 +195,7 @@ def generate_dashboard(
     kpis: str = "[]",
     charts: str = "[]",
     tables: str = "[]",
+    insights: str = "[]",
     layout: str = "auto",
     tool_context=None,
 ) -> dict:
@@ -210,6 +211,8 @@ def generate_dashboard(
         charts: JSON string — array of chart definitions (each with 'chart_type', 'title', 'labels', 'datasets').
                 Example: '[{"chart_type": "bar", "title": "Revenue by Region", "labels": ["East","West"], "datasets": [{"label": "Revenue", "data": [100,200]}]}]'
         tables: JSON string — array of table definitions (each with 'title', 'columns', 'rows').
+        insights: JSON string — array of insight definitions (each with 'title', 'body', optional 'icon', 'priority').
+                  Example: '[{"title": "Key Finding", "body": "Revenue grew 20% in Q4", "priority": "high"}]'
         layout: Layout mode — "auto", "2-column", "3-column", "1-top-2-bottom".
         tool_context: ADK ToolContext (auto-injected). Used to update shared state.
 
@@ -221,6 +224,7 @@ def generate_dashboard(
         kpis=_parse_json_param(kpis, []),
         charts=_parse_json_param(charts, []),
         tables=_parse_json_param(tables, []),
+        insights=_parse_json_param(insights, []),
         layout=layout,
     )
     _update_viz_state(tool_context, "dashboard", title, payload["surfaceId"])
