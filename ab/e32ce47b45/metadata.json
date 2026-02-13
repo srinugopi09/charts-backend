@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "abe32ce47b45",
+  "strategy": "manual-commit",
+  "branch": "feat/chart-value-prefix-suffix",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gitignore"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ab/e32ce47b45/0/metadata.json",
+      "transcript": "/ab/e32ce47b45/0/full.jsonl",
+      "context": "/ab/e32ce47b45/0/context.md",
+      "content_hash": "/ab/e32ce47b45/0/content_hash.txt",
+      "prompt": "/ab/e32ce47b45/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 38,
+    "cache_creation_tokens": 146617,
+    "cache_read_tokens": 671808,
+    "output_tokens": 256,
+    "api_call_count": 20
+  }
+}
