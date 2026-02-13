@@ -34,6 +34,10 @@ coverage.xml
 # Tech debt backlog
 docs/TECH_DEBT.md
 
+# Tooling
+.claude/
+.entire/
+
 # OS
 .DS_Store
 Thumbs.db
