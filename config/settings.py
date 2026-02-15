@@ -25,6 +25,17 @@ class Settings(BaseSettings):
     def cors_origins_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
+    @property
+    def session_db_url_async(self) -> str:
+        """Async DB URL for DatabaseSessionService.
+
+        Uses session_db_url if explicitly set, otherwise derives from
+        database_url by swapping the driver to asyncpg.
+        """
+        if self.session_db_url:
+            return self.session_db_url
+        return self.database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",

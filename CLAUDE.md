@@ -40,7 +40,7 @@ uv run uvicorn main:app --reload --port 8080
 
 ## Project Structure
 Code lives at repo root (not in a backend/ subdirectory):
-- `main.py` — FastAPI app, CORS, health check, AG-UI SSE endpoint (`POST /api/agent/run`)
+- `main.py` — FastAPI app, CORS, health check, AG-UI SSE endpoint (`POST /api/agent/run`), session service wiring
 - `config/settings.py` — Pydantic Settings (env-based config, singleton via `get_settings()`)
 - `agents/orchestrator.py` — ADK Agent definition with Gemini model and all 9 tools
 - `agents/prompts/orchestrator_system.txt` — System prompt (iterated independently of code)
@@ -52,6 +52,9 @@ Code lives at repo root (not in a backend/ subdirectory):
 - `a2ui/catalog.py` — Component type registry, catalog ID, and 5 color palettes
 - `state/shared_state.py` — AgentContext, VisualizationState, QueryState Pydantic models
 - `db/connection.py` — SQLAlchemy engine factory with connection pooling
+- `db/models.py` — Thread SQLAlchemy model (conversation ownership)
+- `auth/dependencies.py` — `get_current_user_id` FastAPI dependency (placeholder: reads `X-User-Id` header)
+- `api/threads.py` — Threads CRUD router (`GET/POST/PATCH/DELETE /api/threads`)
 
 ## Key Conventions
 - **Tools are plain Python functions** returning dicts — ADK auto-wraps as FunctionTool
@@ -61,6 +64,10 @@ Code lives at repo root (not in a backend/ subdirectory):
 - **Settings** accessed via `get_settings()` singleton — never use `os.getenv()` directly
 - **ag-ui-adk** handles SSE streaming, event translation, session lifecycle automatically
 - **hatchling** build backend — packages listed in `[tool.hatch.build.targets.wheel]`
+- **Session persistence**: `DatabaseSessionService` from google-adk stores sessions in PostgreSQL (asyncpg)
+- **Internal tables hidden**: `_INTERNAL_TABLES` set in `sql_tools.py` prevents agent from seeing ADK/app tables
+- **Auth placeholder**: `get_current_user_id` reads `X-User-Id` header — single swap-point for real auth
+- **PreciseTimestamp patch**: `main.py` patches google-adk's `PreciseTimestamp` to use `TIMESTAMP WITH TIME ZONE` on PostgreSQL (asyncpg requires timezone-aware datetimes)
 
 ## Database
 - PostgreSQL with 9 seed tables (~797 rows of deterministic test data)
@@ -68,7 +75,14 @@ Code lives at repo root (not in a backend/ subdirectory):
 - Tables: teams (10), projects (30), quarterly_revenue (72), monthly_revenue (216), monthly_metrics (95), deliverables (87), budget_breakdown (78), resource_allocation (159), incidents (50)
 
 ## API Endpoints
+
 - `POST /api/agent/run` — AG-UI SSE endpoint (accepts RunAgentInput, returns event stream)
+- `POST /agents/state` — Session recovery (returns thread state + message history)
+- `GET /api/threads` — List threads for current user (paginated)
+- `POST /api/threads` — Create a new conversation thread
+- `GET /api/threads/{thread_id}` — Get thread metadata
+- `PATCH /api/threads/{thread_id}` — Update thread (rename)
+- `DELETE /api/threads/{thread_id}` — Delete thread + ADK session
 - `GET /health` — Health check with DB connectivity status
 
 ## Environment Variables
@@ -78,6 +92,7 @@ See `.env.example`. Key variables:
 - `GEMINI_MODEL` — Model identifier (default: gemini-2.0-flash)
 - `CORS_ORIGINS` — Comma-separated allowed origins
 - `LOG_LEVEL` — Python logging level (default: INFO)
+- `SESSION_DB_URL` — Optional async DB URL for session persistence (defaults to asyncpg version of DATABASE_URL)
 
 ## Testing
 - **Unit tests** (48 tests, no DB): SQL validation, A2UI builders, state models, config

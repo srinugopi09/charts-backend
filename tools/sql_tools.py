@@ -24,6 +24,12 @@ _FORBIDDEN_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 
+# Tables managed by ADK / the application — hidden from the agent
+_INTERNAL_TABLES = {
+    "sessions", "events", "app_states", "user_states",
+    "adk_internal_metadata", "threads", "ag_ui_events",
+}
+
 
 def list_tables() -> dict:
     """Returns all user table names in the connected PostgreSQL database.
@@ -33,7 +39,7 @@ def list_tables() -> dict:
     """
     engine = get_engine()
     insp = inspect(engine)
-    tables = sorted(insp.get_table_names())
+    tables = sorted(t for t in insp.get_table_names() if t not in _INTERNAL_TABLES)
     logger.info("list_tables: found %d tables", len(tables))
     return {"tables": tables, "count": len(tables)}
 
@@ -50,8 +56,8 @@ def describe_table(table_name: str) -> dict:
     engine = get_engine()
     insp = inspect(engine)
 
-    # Check table exists
-    available = insp.get_table_names()
+    # Check table exists (excluding internal tables)
+    available = [t for t in insp.get_table_names() if t not in _INTERNAL_TABLES]
     if table_name not in available:
         return {"error": f"Table '{table_name}' not found. Available tables: {', '.join(available)}"}
 
