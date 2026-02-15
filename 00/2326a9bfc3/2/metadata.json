@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "002326a9bfc3",
+  "session_id": "cc7c6591-7d2e-4eb4-9874-e0a1cd4bf0ad",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-15T20:38:36.180306Z",
+  "branch": "feat/persistent-sessions-threads",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "gemini_debug.log",
+    "main.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "1daf37c0-dcf3-4c80-8c87-85aece0f73e5",
+  "token_usage": {
+    "input_tokens": 38,
+    "cache_creation_tokens": 57163,
+    "cache_read_tokens": 744502,
+    "output_tokens": 324,
+    "api_call_count": 22
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-15T20:38:36.153171Z",
+    "agent_lines": 44,
+    "human_added": 929,
+    "human_modified": 4,
+    "human_removed": 0,
+    "total_committed": 973,
+    "agent_percentage": 4.522096608427543
+  }
+}

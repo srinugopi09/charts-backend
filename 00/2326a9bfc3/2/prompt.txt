@@ -1,0 +1,25 @@
+is it possible to see what exactly goes to gemini api for every call ?
+
+---
+
+basically, I want to see what is in the context for LLM
+
+---
+
+yes
+
+---
+
+can we put the logs in file
+
+---
+
+I can see the logs but I dont see what I need
+
+---
+
+commit the changes and push
+
+---
+
+commit everything and push
