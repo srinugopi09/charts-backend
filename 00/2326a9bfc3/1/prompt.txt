@@ -1,0 +1,125 @@
+do we persist the user conversations ?
+
+---
+
+for get about what we have so far, if we have to design the right way and how it is done in prod, can you guide me how to persist the ag-ui events ?
+
+---
+
+how it is different from the existing impelentation with threads
+
+---
+
+@api/threads.py  what does this do ?
+
+---
+
+based on your recommendation, what do we need to do and explain me so that I understand better
+
+---
+
+yes, what will happen to @api/threads.py  ? is it still useful ?
+
+---
+
+okay. goahead.
+
+---
+
+can you restart the server?
+
+---
+
+I have access to the database, how to view the ag-ui events captured in the database
+
+---
+
+I have sent couple of messages but I don't see it in database. adk evetns are gettign stored
+
+---
+
+I haven't done any changes on front end, should I do it or the change your making is not related to ti
+
+---
+
+I can see the events in database. now should I integrate with backend ?
+
+---
+
+I mean front end
+
+---
+
+before you commit and update, what instructions should I give to my front end ?
+
+---
+
+yeah- we should store user messages or else loading history will be incomplete. how are you going to address that, in ag-ui from the client side, isn't the user message is also sent as a event from the
+
+---
+
+yes
+
+---
+
+chunk-PDPSD3L5.js?v=69bc4737:16769 Angular is running in development mode.
+ag-ui.service.ts:119 AG-UI Event: RUN_ERROR {type: 'RUN_ERROR', message: 'Agent execution failed: a coroutine was expected, …ions/3.11/lib/python3.11/asyncio/futures.py:387]>', code: 'AGENT_ERROR'}code: "AGENT_ERROR"message: "Agent execution failed: a coroutine was expected, got <Future pending cb=[_chain_future.<locals>._call_check_cancel() at /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/futures.py:387]>"type: "RUN_ERROR"[[Prototype]]: Object
+ag-ui.service.ts:119 AG-UI Event: RUN_ERROR {type: 'RUN_ERROR', message: 'Agent execution failed: a coroutine was expected, …ions/3.11/lib/python3.11/asyncio/futures.py:387]>', code: 'AGENT_ERROR'}code: "AGENT_ERROR"message: "Agent execution failed: a coroutine was expected, got <Future pending cb=[_chain_future.<locals>._call_check_cancel() at /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/futures.py:387]>"type: "RUN_ERROR"[[Prototype]]: Object
+
+---
+
+it is working now. now what should I inform the front end about the integration
+
+---
+
+can you create a markdown to share it with front end
+
+---
+
+These are the questions that I got from front end team,  Frontend Integration — Questions for Backend
+
+1. A2UI event_data.messages format (blocks frontend work)
+
+When GET /api/threads/{thread_id}/messages returns a tool result with event_data.a2ui === true, what format are event_data.messages stored in?
+
+Option A — Backend wire format (what the agent originally produced):
+
+
+{
+  "component": "Graph",
+  "id": "chart-1",
+  "graphType": "bar",
+  "title": "Revenue",
+  "data": { "labels": [...], "datasets": [...] }
+}
+Option B — A2UI spec format (post-transformation):
+
+
+{
+  "component": { "Graph": { "graphType": "bar", "title": "Revenue", "data": {...} } },
+  "id": "chart-1"
+}
+This matters because the frontend has a transformation layer (flattenBackendComponent) that converts A → B. If you store format B, replaying through that layer would double-transform and break rendering.
+
+2. Does the agent use initialMessages from the request or its own persisted history?
+
+Currently the frontend sends the last 50 user messages in initialMessages on every POST /api/agent/run. Now that the backend persists all conversation events:
+
+Does the agent read conversation context from its persisted state (ignoring initialMessages)?
+Or does it still rely on initialMessages from the request?
+If persisted, the frontend can stop sending history and just send the new message — simpler and avoids duplication.
+
+3. Message pagination
+
+GET /api/threads/{id}/messages has no limit/offset. Is this intentional? For long conversations with many tool calls, the response could get large. Any plan to add pagination, or should the frontend assume the full list is always returned?
+
+4. Auto-title
+
+Thread titles default to null. Who is responsible for generating them?
+
+Option A: Frontend truncates the first user message and PATCHes it
+Option B: Backend auto-generates a title after the first run completes
+Option C: Frontend responsibility, but deferred (implement later)
+5. Chart JSON in SSE stream
+
+The backend currently sends chart config as a TEXT_MESSAGE in the SSE stream (which the frontend detects and filters out). Does this behavior continue unchanged with persistence, or will chart data only come through TOOL_CALL_RESULT events going forward?
