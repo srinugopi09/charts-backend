@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "002326a9bfc3",
+  "session_id": "a173117f-cc96-469b-b0a6-e1d10679dccd",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-15T20:37:36.588226Z",
+  "branch": "feat/persistent-sessions-threads",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env.example",
+    ".gitignore",
+    "CLAUDE.md",
+    "api/__init__.py",
+    "api/threads.py",
+    "auth/__init__.py",
+    "auth/dependencies.py",
+    "config/settings.py",
+    "db/models.py",
+    "main.py",
+    "pyproject.toml",
+    "tools/sql_tools.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "2bd344b9-3552-4b5d-b36c-b9def0e77bf8",
+  "checkpoint_transcript_start": 145,
+  "transcript_lines_at_start": 145,
+  "token_usage": {
+    "input_tokens": 3515,
+    "cache_creation_tokens": 679209,
+    "cache_read_tokens": 6923920,
+    "output_tokens": 1469,
+    "api_call_count": 77
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-15T20:37:36.321593Z",
+    "agent_lines": 548,
+    "human_added": 425,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 973,
+    "agent_percentage": 56.32065775950667
+  }
+}

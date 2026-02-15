@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "002326a9bfc3",
+  "strategy": "manual-commit",
+  "branch": "feat/persistent-sessions-threads",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env.example",
+    ".gitignore",
+    "CLAUDE.md",
+    "api/__init__.py",
+    "api/threads.py",
+    "auth/__init__.py",
+    "auth/dependencies.py",
+    "config/settings.py",
+    "db/models.py",
+    "main.py",
+    "pyproject.toml",
+    "tools/sql_tools.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/00/2326a9bfc3/0/metadata.json",
+      "transcript": "/00/2326a9bfc3/0/full.jsonl",
+      "context": "/00/2326a9bfc3/0/context.md",
+      "content_hash": "/00/2326a9bfc3/0/content_hash.txt",
+      "prompt": "/00/2326a9bfc3/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3515,
+    "cache_creation_tokens": 679209,
+    "cache_read_tokens": 6923920,
+    "output_tokens": 1469,
+    "api_call_count": 77
+  }
+}
