@@ -38,6 +38,9 @@ docs/TECH_DEBT.md
 .claude/
 .entire/
 
+# Debug logs
+gemini_debug.log
+
 # OS
 .DS_Store
 Thumbs.db
