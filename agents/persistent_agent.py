@@ -116,7 +116,16 @@ class PersistentADKAgent(ADKAgent):
         if input_data.messages:
             for msg in reversed(input_data.messages):
                 if getattr(msg, "role", None) == "user":
-                    content = msg.content if isinstance(msg.content, str) else str(msg.content)
+                    if isinstance(msg.content, str):
+                        content = msg.content
+                    elif isinstance(msg.content, list):
+                        # Extract text from AG-UI content parts
+                        content = " ".join(
+                            part.text for part in msg.content
+                            if hasattr(part, "text")
+                        )
+                    else:
+                        content = str(msg.content)
                     asyncio.ensure_future(asyncio.get_running_loop().run_in_executor(
                         None, _save_user_message_sync,
                         thread_id, run_id, user_id, content,
